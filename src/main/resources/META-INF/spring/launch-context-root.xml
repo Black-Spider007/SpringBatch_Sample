@@ -18,8 +18,6 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
 		http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd">
 
-	<context:property-placeholder location="classpath:batch.properties" />
-
 	<context:spring-configured />
 	<context:component-scan base-package="jp.co.example" />
 	<context:annotation-config />
@@ -45,6 +43,7 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="MyBatisDataSource" />
 	</bean>
+
 	<mybatis:scan base-package="jp.co.example.DbMapper" />
 
 	<!-- ファイル読み込みしかしないので設定ファイルで完結させる -->

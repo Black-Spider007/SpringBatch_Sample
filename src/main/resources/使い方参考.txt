@@ -1,5 +1,11 @@
-1.　ローカルのMySQLに"batch_sample"DBを作成。
-2.　sample_ddl.sqlを使ってbatch_sampleにバッチ書き込み先テーブルを作成
+■一番最初の実行
+1.　ローカルのMySQLに "batch_sample" DBを作成。
+2.　sample_ddl.sql を使って batch_sample にバッチ書き込み先テーブルを作成
 3.　引数
-　　　classpath:/launch-context.xml fileToDb inputFile=file:./input_file.csv
+　　　classpath:/launch-context-local.xml fileToDb inputFile=file:./input_file.csv
 　　　を指定してバッチを起動させる。
+
+■環境の切り替え方法
+1.　batch-local.properties 、 launch-context-local.xml をコピーして local の部分を環境名に変更
+2.　properties ファイルで環境に応じたDB接続先を設定する。必要に応じてメタ情報保存用のDBに関する設定もする
+3.　起動引数 classpath:/launch-context-local.xml を classpath:/launch-context-{環境名}.xml に書き換える
