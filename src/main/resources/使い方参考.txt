@@ -1,0 +1,5 @@
+1.　ローカルのMySQLに"batch_sample"DBを作成。
+2.　sample_ddl.sqlを使ってbatch_sampleにバッチ書き込み先テーブルを作成
+3.　引数
+　　　classpath:/launch-context.xml fileToDb inputFile=file:./input_file.csv
+　　　を指定してバッチを起動させる。

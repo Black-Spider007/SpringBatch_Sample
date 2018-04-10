@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/jobXML_1_0.xsd">
+
+	<context:property-placeholder location="classpath:batch.properties" />
+
+	<context:spring-configured />
+	<context:component-scan base-package="jp.co.example" />
+	<context:annotation-config />
+
+	<jdbc:initialize-database data-source="dataSource">
+		<jdbc:script location="${batch.schema.script}" />
+	</jdbc:initialize-database>
+
+	<batch:job-repository id="jobRepository" />
+
+	<import resource="classpath:/META-INF/spring/module-context.xml" />
+	<!-- MyBatis-Springのための設定 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="MyBatisDataSource" />
+	</bean>
+	<bean id="MyBatisDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${batch.jdbc.job.driver}" />
+		<property name="url" value="${batch.jdbc.job.url}" />
+		<property name="username" value="${batch.jdbc.job.user}" />
+		<property name="password" value="${batch.jdbc.job.password}" />
+	</bean>
+	<bean id="logicTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="MyBatisDataSource" />
+	</bean>
+	<mybatis:scan base-package="jp.co.example.DbMapper" />
+
+	<!-- ファイル読み込みしかしないので設定ファイルで完結させる -->
+	<bean id="EmployeeReader" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<bean
+						class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value="," />
+						<property name="names" value="number,name,note" />
+					</bean>
+				</property>
+				<property name="fieldSetMapper">
+					<bean
+						class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+						<property name="prototypeBeanName" value="employeeFileRow" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="resource" value="#{jobParameters[inputFile]}" />
+		<!-- <property name="linesToSkip" value="1" /> -->
+	</bean>
+
+	<util:list id="partitionNameList" value-type="java.lang.String">
+		<value>p0</value>
+		<value>p1</value>
+		<value>p2</value>
+		<value>p3</value>
+		<value>p4</value>
+	</util:list>
+
+	<!-- テーブルをパーティション毎に読み込むためのReader -->
+	<bean id="tableToOtherTableReader" class="org.mybatis.spring.batch.MyBatisCursorItemReader"
+		scope="step">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="queryId"
+			value="jp.co.example.DbMapper.PurchaseDetailMapper.selectByPartition" />
+		<property name="parameterValues" ref="partitionNameMap" />
+	</bean>
+
+	<!-- MultiTablePartitionPartitionerにパーティション名を渡してやる -->
+	<bean id="multiTablePartitionPartitioner"
+		class="jp.co.example.Batch.TableToOtherTable.MultiTablePartitionPartitioner">
+		<property name="partitions" ref="partitionNameList" />
+	</bean>
+
+	<!-- org.mybatis.spring.batch.MyBatisPagingItemReaderに渡すパラメータ -->
+	<util:map id="partitionNameMap" scope="step">
+		<entry key="partitionName" value="#{stepExecutionContext['partitionName']}" />
+	</util:map>
+
+	<!-- タスクExecutor -->
+	<bean id="taskExecutor" class="org.springframework.core.task.SyncTaskExecutor" />
+
+</beans>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<description>Example job to get you started. It provides a skeleton for
+		a typical batch application.
+	</description>
+
+	<batch:job id="fileToDb">
+		<batch:listeners>
+			<batch:listener ref="logListener" />
+		</batch:listeners>
+		<batch:step id="fileToDb_step1">
+			<batch:tasklet transaction-manager="logicTransactionManager"
+				start-limit="100">
+				<batch:chunk reader="EmployeeReader" processor="fileToDBExampleItemProcessor"
+					writer="fileToDBExampleItemWriter" commit-interval="1000" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+	<batch:job id="tableToOtherTableUsingPartition">
+		<batch:listeners>
+			<batch:listener ref="logListener" />
+		</batch:listeners>
+		<batch:step id="tableToOtherTable_step1">
+			<batch:partition step="tableToOtherTable_stepImpl" partitioner="multiTablePartitionPartitioner">
+				<batch:handler grid-size="5" task-executor="taskExecutor" />
+			</batch:partition>
+		</batch:step>
+	</batch:job>
+	<!-- 並列処理のとき1スレッドが実際に実行するステップ -->
+	<batch:step id="tableToOtherTable_stepImpl">
+		<batch:tasklet transaction-manager="logicTransactionManager"
+			start-limit="100">
+			<batch:chunk reader="tableToOtherTableReader"
+				processor="tableToOtherTableExampleItemProcessor" writer="tableToOtherTableExampleItemWriter"
+				commit-interval="1000" />
+		</batch:tasklet>
+	</batch:step>
+
+</beans>
