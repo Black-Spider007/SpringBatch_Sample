@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.DbMapper.PurchaseDetail;
-import jp.co.example.Entity.InputData;
+import jp.co.example.Entity.InputFromDB;
 import jp.co.example.Entity.OutputToDB;
 
 @Repository("purchaseDetailEntity")
 @Scope("prototype")
 @Configurable
-public class PurchaseDetailEntity extends PurchaseDetail implements InputData {
+public class PurchaseDetailEntity extends PurchaseDetail implements InputFromDB {
 
 	@Autowired
 	@Qualifier("purchaseSummaryEntity")
