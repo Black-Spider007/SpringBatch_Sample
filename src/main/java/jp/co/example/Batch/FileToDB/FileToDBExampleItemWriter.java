@@ -17,6 +17,7 @@ public class FileToDBExampleItemWriter implements ItemWriter<OutputToDB> {
 	public void write(List<? extends OutputToDB> list) throws Exception {
 		for (OutputToDB data : list) {
 			log.info(data.toString());
+			// どんなことしてるのかは実装クラスに隠してある（カプセル化、ポリモーフィズム）
 			data.insertThisRecord();
 		}
 

@@ -16,6 +16,9 @@ public class FileToDBExampleItemProcessor implements ItemProcessor<InputFileRow,
 
 	public OutputToDB process(InputFileRow fileRow) throws Exception {
 		log.info(fileRow.toString());
+
+		// InputFileRow を実装しているクラスのオブジェクトなら必ず OutputToDB オブジェクトを生成する機能を持っているはず。
+		// 中身でどんな処理をしているかは知らないけれど必ず OutputToDB オブジェクトを生成してくれる（カプセル化、ポリモーフィズム）
 		return fileRow.convertToDB();
 	}
 
