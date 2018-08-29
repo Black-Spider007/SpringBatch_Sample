@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration >
-  <classPathEntry location="C:\Program Files\MySQL\mysql-connector-java-5.1.44\mysql-connector-java-5.1.44-bin.jar"/>
+  <classPathEntry location="C:\Program Files\MySQL\mysql-connector-java-5.1.46\mysql-connector-java-5.1.46-bin.jar"/>
 <!-- ↑　MySQLに接続するConnectorJのjarファイルを指定します  -->
   <context id="context1" >
     <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/batch_sample" userId="root" password="root" />
     <!-- ↑　ローカルのMySQLに接続するパスとDB名、それからMySQLのユーザーIDとパスを指定します -->
     <javaModelGenerator targetPackage="jp.co.example.DbMapper" targetProject="spring-batch-simple/src/main/java/" />
-    <sqlMapGenerator targetPackage="jp.co.example.DbMapper" targetProject="spring-batch-simple/src/main/java/" />
+    <sqlMapGenerator targetPackage="jp.co.example.DbMapper" targetProject="spring-batch-simple/src/main/resources/" />
     <javaClientGenerator targetPackage="jp.co.example.DbMapper" targetProject="spring-batch-simple/src/main/java/" type="XMLMAPPER" />
     <!-- ↑  3行すべてに、MyBatisのクラスを入れたいパッケージ名と、プロジェクトのファイルパスを入れてください -->
-<!--     <table schema="batch_sample" tableName="employee" > -->
-    <table schema="batch_sample" tableName="purchase_detail" >
-    <table schema="batch_sample" tableName="purchase_summary" >
+    <table schema="batch_sample" tableName="employee" />
+    <table schema="batch_sample" tableName="purchase_detail" />
+    <table schema="batch_sample" tableName="purchase_summary" />
     <!-- ↑　DB名とテーブル名を入れてください -->
-    </table>
   </context>
 </generatorConfiguration>
