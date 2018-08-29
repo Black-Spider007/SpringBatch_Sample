@@ -2,7 +2,7 @@ package jp.co.example.FileMapper.AntiPatternImpl;
 
 import org.springframework.stereotype.Component;
 
-@Component("AntiPatternEmployeeFileRow")
+@Component("antiPatternEmployeeFileRow")
 public class AntiPatternEmployeeFileRow {
 	private String number;
 	private String name;

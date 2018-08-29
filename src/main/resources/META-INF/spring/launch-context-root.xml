@@ -69,6 +69,28 @@
 		<property name="resource" value="#{jobParameters[inputFile]}" />
 		<!-- <property name="linesToSkip" value="1" /> -->
 	</bean>
+	<bean id="AntiPtternEmployeeReader" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer">
+					<bean
+						class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value="," />
+						<property name="names" value="number,name,note" />
+					</bean>
+				</property>
+				<property name="fieldSetMapper">
+					<bean
+						class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+						<property name="prototypeBeanName" value="antiPatternEmployeeFileRow" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="resource" value="#{jobParameters[inputFile]}" />
+		<!-- <property name="linesToSkip" value="1" /> -->
+	</bean>
 
 	<util:list id="partitionNameList" value-type="java.lang.String">
 		<value>p0</value>

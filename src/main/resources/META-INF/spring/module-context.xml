@@ -21,6 +21,18 @@
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
+	<batch:job id="antiPatternFileToDb">
+		<batch:listeners>
+			<batch:listener ref="logListener" />
+		</batch:listeners>
+		<batch:step id="antiPatternFileToDb_step1">
+			<batch:tasklet transaction-manager="logicTransactionManager"
+				start-limit="100">
+				<batch:chunk reader="AntiPtternEmployeeReader" processor="fileToDBAntiPatternExampleItemProcessor"
+					writer="fileToDBAntiPatternExampleItemWriter" commit-interval="1000" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
 	<batch:job id="tableToOtherTableUsingPartition">
 		<batch:listeners>
 			<batch:listener ref="logListener" />

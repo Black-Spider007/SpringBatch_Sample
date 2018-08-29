@@ -7,9 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.DbMapper.PurchaseSummary;
 import jp.co.example.DbMapper.PurchaseSummaryMapper;
-import jp.co.example.Entity.OutputToDB;
 
-@Repository("purchaseSummaryEntity")
+@Repository("AntiPatternPurchaseSummaryEntity")
 @Scope("prototype")
 @Configurable
 public class AntiPatternPurchaseSummaryEntity extends PurchaseSummary {

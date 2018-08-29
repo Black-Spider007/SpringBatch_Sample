@@ -324,6 +324,17 @@
     <result column="item_price" jdbcType="INTEGER" property="itemPrice" />
     <result column="purchase_at" jdbcType="TIMESTAMP" property="purchaseAt" />
   </resultMap>
+
+  <resultMap id="BaseResultMapAntiPatternEntity" type="jp.co.example.Entity.AntiPatternImpl.AntiPatternPurchaseDetailEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="purchase_number" jdbcType="VARCHAR" property="purchaseNumber" />
+    <result column="purchase_number_seq" jdbcType="INTEGER" property="purchaseNumberSeq" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_price" jdbcType="INTEGER" property="itemPrice" />
+    <result column="purchase_at" jdbcType="TIMESTAMP" property="purchaseAt" />
+  </resultMap>
+
   <select id="selectByPartition"  resultMap="BaseResultMapEntity">
     select customer_id, purchase_number, SUM(item_price) item_price, purchase_at from purchase_detail
     PARTITION(${partitionName}) group by DATE(purchase_at), purchase_number, customer_id

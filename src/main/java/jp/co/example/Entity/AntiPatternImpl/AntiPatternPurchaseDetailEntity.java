@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.DbMapper.PurchaseDetail;
 
-@Repository("purchaseDetailEntity")
+@Repository("AntiPatternPurchaseDetailEntity")
 @Scope("prototype")
 @Configurable
 public class AntiPatternPurchaseDetailEntity extends PurchaseDetail {
