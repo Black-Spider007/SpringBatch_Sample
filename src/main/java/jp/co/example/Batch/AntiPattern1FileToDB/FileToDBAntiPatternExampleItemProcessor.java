@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import jp.co.example.DbMapper.Employee;
@@ -18,6 +19,7 @@ public class FileToDBAntiPatternExampleItemProcessor implements ItemProcessor<An
 	private static final Log log = LogFactory.getLog(FileToDBAntiPatternExampleItemProcessor.class);
 
 	@Autowired
+	@Qualifier("jp.co.example.DbMapper.Employee")
 	Employee employee;
 
 	public Employee process(AntiPatternEmployeeFileRow fileRow) throws Exception {

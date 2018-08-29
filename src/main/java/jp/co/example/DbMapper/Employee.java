@@ -1,5 +1,8 @@
 package jp.co.example.DbMapper;
 
+import org.springframework.stereotype.Component;
+
+@Component("jp.co.example.DbMapper.Employee")
 public class Employee {
 
 	/**
