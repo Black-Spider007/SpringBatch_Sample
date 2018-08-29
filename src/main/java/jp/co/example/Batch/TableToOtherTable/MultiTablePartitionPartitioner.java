@@ -25,12 +25,6 @@ public class MultiTablePartitionPartitioner implements Partitioner {
 		this.keyName = keyName;
 	}
 
-	/**
-	 * Assign the filename of each of the injected resources to an
-	 * {@link ExecutionContext}.
-	 *
-	 * @see Partitioner#partition(int)
-	 */
 	@Override
 	public Map<String, ExecutionContext> partition(int gridSize) {
 		Map<String, ExecutionContext> map = new HashMap<String, ExecutionContext>(gridSize);

@@ -1,8 +1,6 @@
-package jp.co.example.FileMapper;
+package jp.co.example.Entity;
 
-import jp.co.example.Entity.OutputToDB;
-
-public interface InputFileRow {
+public interface InputFromDB {
 	/**
 	 * @return
 	 * 【Processor の中でのみ使用する】
